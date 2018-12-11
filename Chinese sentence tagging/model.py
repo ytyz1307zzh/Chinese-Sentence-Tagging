@@ -5,10 +5,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 # Constants used in the model
 VOCAB_SIZE=10002
 HIDDEN_SIZE=512
-BATCH_SIZE=32
 KEEP_PROB=0.8
 NUM_TAGS=4
-NUM_EPOCH=20
 
 def make_dataset(file_path):
     dataset = tf.data.TextLineDataset(file_path)
