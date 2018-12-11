@@ -26,7 +26,7 @@ def train_model(opt, train_data, valid_data, word_embedding):
     saver = tf.train.Saver()
 
     log_tf = open(opt.log+'.train', 'w', encoding='utf-8')
-    log_vf = open(opt.log+'valid', 'w', encoding='utf-8')
+    log_vf = open(opt.log+'.valid', 'w', encoding='utf-8')
 
     with tf.Session() as sess:
         sess.run(tf.global_variables_initializer())
@@ -52,6 +52,7 @@ def train_model(opt, train_data, valid_data, word_embedding):
                     aver_loss = sum(loss_list) / len(loss_list)
                     train_aver_accu = sum(train_accu_list) / len(train_accu_list)
                     log_tf.write('epoch: {}, loss: {}, accu: {}%\n'.format(i+1, aver_loss, train_aver_accu*100))
+                    log_tf.flush()
                     break
 
             sess.run(valid_iter.initializer)
@@ -73,6 +74,7 @@ def train_model(opt, train_data, valid_data, word_embedding):
                         saver.save(sess, './'+opt.save_model+'_accu{:.5f}_epoch{}'.format(valid_aver_accu, i+1))
                     # save log information
                     log_vf.write('epoch: {}, accu: {}%\n'.format(i+1, valid_aver_accu*100))
+                    log_vf.flush()
                     break
 
         print("[INFO] Training finished.")
