@@ -95,6 +95,6 @@ if __name__ == '__main__':
     print(opt)
 
     word_embedding = np.loadtxt(opt.word_embed, dtype=np.float32, encoding='utf-8')
-    train_data = make_src_trg_dataset(opt.train_src, opt.train_tgt, BATCH_SIZE)
-    valid_data = make_src_trg_dataset(opt.valid_src, opt.valid_tgt, BATCH_SIZE)
+    train_data = make_src_trg_dataset(opt.train_src, opt.train_tgt, opt.batch)
+    valid_data = make_src_trg_dataset(opt.valid_src, opt.valid_tgt, opt.batch)
     train_model(opt, train_data, valid_data, word_embedding)
