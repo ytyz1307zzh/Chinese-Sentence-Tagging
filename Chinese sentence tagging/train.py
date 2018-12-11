@@ -9,11 +9,10 @@ import argparse
 from model import make_src_trg_dataset, model
 import numpy as np
 
-# Constants
-BATCH_SIZE = 32
-NUM_EPOCH = 10
-
 def train_model(opt, train_data, valid_data, word_embedding):
+
+    BATCH_SIZE = opt.batch
+    NUM_EPOCH = opt.epoch
 
     # datasets used for training and validation
     train_iter = train_data.make_initializable_iterator()
@@ -37,13 +36,12 @@ def train_model(opt, train_data, valid_data, word_embedding):
             print("[INFO] Epoch {}:".format(i+1))
             sess.run(train_iter.initializer)
             train_step = 0
-            train_loss, train_accuracy, valid_accuracy = 0, 0, 0
             loss_list = []
             train_accu_list = []
             while True:
                 try:
                     _, train_loss, train_accuracy = sess.run([train_op, loss_op, accuracy_op])
-                    if (train_step * BATCH_SIZE) % 100 == 0: # TODO:change 10 to 100
+                    if (train_step * BATCH_SIZE) % 100 == 0:
                         print("{} training samples finished.".format(train_step * BATCH_SIZE))
                     train_step += 1
                     loss_list.append(train_loss)
@@ -62,7 +60,7 @@ def train_model(opt, train_data, valid_data, word_embedding):
             while True:
                 try:
                     valid_accuracy = sess.run(valid_accuracy_op)
-                    if (valid_step * BATCH_SIZE) % 100 == 0: # TODO:change 10 to 100
+                    if (valid_step * BATCH_SIZE) % 100 == 0:
                         print("{} validation samples finished.".format(valid_step * BATCH_SIZE))
                     valid_step += 1
                     valid_accu_list.append(valid_accuracy)
@@ -91,6 +89,8 @@ if __name__ == '__main__':
     parser.add_argument('-word_embed', required=True, help='pre-trained word embeddings')
     parser.add_argument('-save_model', type=str, default='model', help='path to save the trained model')
     parser.add_argument('-log', type=str, default='log', help='path to saved log information')
+    parser.add_argument('-epoch', type=int, default=30, help='how many epochs do you want to train?')
+    parser.add_argument('-batch', type=int, default=32, help='the size of a batch')
     opt = parser.parse_args()
     print(opt)
 
